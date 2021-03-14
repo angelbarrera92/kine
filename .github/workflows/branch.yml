@@ -1,0 +1,21 @@
+name: "Tests"
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  tests:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '1.15.8'
+    - run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.38.0
+
+    - run: ./scripts/build
+    - run: ./scripts/test
+    - run: ./scripts/validate
+    - run: ./scripts/validate-ci
